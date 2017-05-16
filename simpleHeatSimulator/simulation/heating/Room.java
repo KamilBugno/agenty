@@ -1,4 +1,6 @@
-package heating;
+package simulation.heating;
+
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -8,35 +10,35 @@ import java.util.Set;
  */
 public class Room {
     private int id;
-    private float temperature;
-    private float capacity;
+    private float tempKelvin;
     private float x;
     private float y;
     private float width;
     private float height;
+    private float capacity;
 
     private Set<Connection> connectionSet;
     private Set<TemperatureChanger> tempChangers;
 
-    public Room(int id, float x, float y, float width, float height, float temperature) {
+    public Room(int id, float x, float y, float width, float height, float tempCelsius) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.temperature = temperature;
-        this.capacity = width*height;
+        this.tempKelvin = celsiusToKelvin(tempCelsius);
+        this.capacity = width * height * Consts.HEIGHT;
 
         this.connectionSet = new HashSet<>();
         this.tempChangers = new HashSet<>();
     }
 
     public String getStatus() {
-        return String.format("%d. %.1f", id, temperature);
+        return String.format("%d. %.1f", id, kelvinToCelsius(tempKelvin));
     }
 
     public void printStatus() {
-        System.out.println(getStatus());
+//        System.out.println(getStatus());
     }
 
     protected void addConnection(Connection connection) {
@@ -44,12 +46,9 @@ public class Room {
     }
 
     protected void transferTemperatureTo(Room otherRoom, float wallSize) {
-//        System.out.format("BEFORE. this temp: %f, other temp: %f%n", temperature, otherRoom.getTemperature());
-        float diff = 0.02f*wallSize;
-//        System.out.format("diff: %f%n", diff);
-        setTemperature(temperature+diff);
-        otherRoom.setTemperature(otherRoom.getTemperature()-diff);
-//        System.out.format("AFTER. this temp: %f, other temp: %f%n", temperature, otherRoom.getTemperature());
+        float diff = 0.02f * wallSize;
+        setTempKelvin(tempKelvin + diff);
+        otherRoom.setTempKelvin(otherRoom.getTempKelvin() - diff);
     }
 
     public void applyTempSystem() {
@@ -60,8 +59,28 @@ public class Room {
         return id;
     }
 
-    public float getTemperature() {
-        return temperature;
+    public float getTempCelsius() {
+        return kelvinToCelsius(tempKelvin);
+    }
+
+    public void setTempCelsius(float tempCelsius) {
+        this.tempKelvin = celsiusToKelvin(tempCelsius);
+    }
+
+    public float getTempKelvin() {
+        return tempKelvin;
+    }
+
+    public void setTempKelvin(float tempKelvin) {
+        this.tempKelvin = tempKelvin;
+    }
+
+    public void changeTempByEnergy(float deltaEnergy) {
+        double energy = capacity * Consts.TRANSFER_CONSTANT * tempKelvin;
+        double newEnergy = energy + deltaEnergy;
+        double newTemp = newEnergy / (capacity * Consts.TRANSFER_CONSTANT);
+//        System.out.format("delta energy: %f, capacity: %f%n old energy: %f, newEnergy: %f%n old temp: %f, new temp: %f%n", deltaEnergy, capacity, energy, newEnergy, tempKelvin, newTemp);
+        this.tempKelvin = (float) newTemp;
     }
 
     public float getX() {
@@ -84,7 +103,11 @@ public class Room {
         return capacity;
     }
 
-    public void setTemperature(float temperature) {
-        this.temperature = temperature;
+    private float celsiusToKelvin(float tempCelsius) {
+        return tempCelsius + 274.15f;
+    }
+
+    private float kelvinToCelsius(float tempKelvin) {
+        return tempKelvin - 274.15f;
     }
 }

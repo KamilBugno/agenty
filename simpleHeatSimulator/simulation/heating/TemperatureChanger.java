@@ -1,4 +1,4 @@
-package heating;
+package simulation.heating;
 
 /**
  * Created by huber on 09.05.2017.

@@ -1,6 +1,8 @@
-import heating.Connection;
-import heating.Room;
-import heating.World;
+package simulation;
+
+import simulation.heating.Connection;
+import simulation.heating.Room;
+import simulation.heating.World;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,7 +40,7 @@ public class Main {
         World world = new World(rooms, connections);
         world.printStatus();
 
-        File dataFile = new File("./src/visualization/data.js");
+        File dataFile = new File("./simpleHeatSimulator/visualization/data.js");
         PrintWriter datajs = new PrintWriter(dataFile);
         datajs.append("var world = [").append(world.getJsonRooms()).append("];\n");
         datajs.println("var steps = [");
@@ -47,7 +49,7 @@ public class Main {
         datajs.println("[" + world.getJsonStatus() + "],");
 
         for(int i = 0; i<100;i++) {
-            world.step(1);
+            world.step(60);
             System.out.println("[" + world.getJsonStatus() + "],");
             datajs.println("[" + world.getJsonStatus() + "],");
         }
