@@ -51,10 +51,6 @@ public class Room {
         otherRoom.setTempKelvin(otherRoom.getTempKelvin() - diff);
     }
 
-    public void applyTempSystem() {
-        tempChangers.forEach(TemperatureChanger::transferTemperature);
-    }
-
     public int getId() {
         return id;
     }
