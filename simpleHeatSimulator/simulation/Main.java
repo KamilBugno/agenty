@@ -1,8 +1,6 @@
 package simulation;
 
-import simulation.heating.Connection;
-import simulation.heating.Room;
-import simulation.heating.World;
+import simulation.heating.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,6 +13,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Room room0 = new Room(0, 0, 0, 4, 4, 40);
         Room room1 = new Room(1, 4,0,4,4, 25);
+        room1.addEffector(new TemperatureChanger(new AlwaysTemperatureChange(0.02f)));
         Room room2 = new Room(2, 0,4,7,4, 5);
         Room room3 = new Room(3, 7,4,1,4, 35);
 

@@ -12,7 +12,7 @@ public class AlwaysTemperatureChange implements ITemperatureAdjustingBehaviour {
     }
 
     @Override
-    public float getEnergyChange() {
-        return energyChange;
+    public float getEnergyChange(float dt) {
+        return energyChange * dt;
     }
 }

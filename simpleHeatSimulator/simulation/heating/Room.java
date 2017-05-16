@@ -106,4 +106,16 @@ public class Room {
     private float kelvinToCelsius(float tempKelvin) {
         return tempKelvin - 274.15f;
     }
+
+    public void addEffector(TemperatureChanger temperatureChanger) {
+        tempChangers.add(temperatureChanger);
+    }
+
+    public float effectorsEnergyChange(float dt) {
+        float change = 0.0f;
+        for (TemperatureChanger tCh :tempChangers) {
+            change += tCh.getEnergyChange(dt);
+        }
+        return change;
+    }
 }

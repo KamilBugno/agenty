@@ -5,14 +5,12 @@ package simulation.heating;
  */
 public class TemperatureChanger {
     private ITemperatureAdjustingBehaviour behaviour;
-    private Room room;
 
-    public TemperatureChanger(Room room, ITemperatureAdjustingBehaviour behaviour) {
+    public TemperatureChanger(ITemperatureAdjustingBehaviour behaviour) {
         this.behaviour = behaviour;
-        this.room = room;
     }
 
-    public float getEnergyChange() {
-        return behaviour.getEnergyChange();
+    public float getEnergyChange(float dt) {
+        return behaviour.getEnergyChange(dt);
     }
 }

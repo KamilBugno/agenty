@@ -27,6 +27,8 @@ public class World {
             energyChanges.put(connection.getRoom1(), energyChanges.get(connection.getRoom1()) + energyChange);
             energyChanges.put(connection.getRoom2(), energyChanges.get(connection.getRoom2()) - energyChange);
         });
+
+        rooms.forEach(room -> energyChanges.put(room, energyChanges.get(room) + room.effectorsEnergyChange(dt)));
 //        System.out.println(energyChanges);
         energyChanges.forEach((room, change) -> room.changeTempByEnergy(change));
     }
