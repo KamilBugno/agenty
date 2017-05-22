@@ -1,6 +1,4 @@
-package simulation.heating;
-
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+package pl.edu.agh.agents.simulation;
 
 import java.util.HashSet;
 import java.util.Set;

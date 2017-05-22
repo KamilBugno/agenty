@@ -1,4 +1,4 @@
-package simulation.heating;
+package pl.edu.agh.agents.simulation;
 
 import java.util.HashMap;
 import java.util.Locale;

@@ -1,6 +1,6 @@
-package simulation;
+package pl.edu.agh.agents;
 
-import simulation.heating.*;
+import pl.edu.agh.agents.simulation.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Main {
+public class Simulation {
 
     public static void main(String[] args) throws FileNotFoundException {
         Room room0 = new Room(0, 0, 0, 4, 4, 40);
