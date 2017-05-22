@@ -2,10 +2,10 @@ package pl.edu.agh.agents;
 
 import pl.edu.agh.agents.simulation.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 public class Simulation {
@@ -23,7 +23,7 @@ public class Simulation {
         Connection connection3 = new Connection(room1, room3, 1.0f);
         Connection connection4 = new Connection(room2, room3, 4.0f);
 
-        Set<Room> rooms = new HashSet<>();
+        Set<Room> rooms = new LinkedHashSet<>();
         rooms.add(room0);
         rooms.add(room1);
         rooms.add(room2);
@@ -39,21 +39,41 @@ public class Simulation {
         World world = new World(rooms, connections);
         world.printStatus();
 
-        File dataFile = new File("./simpleHeatSimulator/visualization/data.js");
-        PrintWriter datajs = new PrintWriter(dataFile);
-        datajs.append("var world = [").append(world.getJsonRooms()).append("];\n");
-        datajs.println("var steps = [");
+        String env_path = "./environment/";
+        LinkedList<File> files = new LinkedList<>();
+        LinkedList<Room> room_list = new LinkedList<>();
+        room_list.add(room0);
+        room_list.add(room1);
+        room_list.add(room2);
+        room_list.add(room3);
 
-        System.out.println("[" + world.getJsonStatus() + "],");
-        datajs.println("[" + world.getJsonStatus() + "],");
-
-        for(int i = 0; i<100;i++) {
-            world.step(60);
-            System.out.println("[" + world.getJsonStatus() + "],");
-            datajs.println("[" + world.getJsonStatus() + "],");
+        for (int i = 0; i < rooms.size(); i++) {
+            File f = new File(env_path + "room_" + i);
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            files.add(f);
         }
 
-        datajs.println("];");
-        datajs.close();
+
+        for(int i = 0; i<100; i++) {
+            world.step(60);
+            for (int j = 0; j < rooms.size(); j++) {
+                File file = files.get(j);
+                PrintWriter printWriter = new PrintWriter(file);
+                Room room = room_list.get(j);
+                System.out.println("room " + j + " temp " + room.getValue());
+                printWriter.write(room.getValue());
+                printWriter.flush();
+            }
+            try {
+                Thread.sleep(1000);
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
     }
 }

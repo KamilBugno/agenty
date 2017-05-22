@@ -1,6 +1,7 @@
 package pl.edu.agh.agents.simulation;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -91,6 +92,10 @@ public class Room {
 
     public float getHeight() {
         return height;
+    }
+
+    public String getValue() {
+        return String.format(Locale.US, "%.1f", this.getTempCelsius());
     }
 
     public float getCapacity() {
