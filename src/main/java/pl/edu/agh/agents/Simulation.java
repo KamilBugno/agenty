@@ -1,7 +1,5 @@
 package pl.edu.agh.agents;
 
-import pl.edu.agh.agents.simulation.*;
-
 import java.io.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -11,37 +9,37 @@ import java.util.Set;
 public class Simulation {
 
     public static void main(String[] args) throws FileNotFoundException {
-        Room room0 = new Room(0, 0, 0, 4, 4, 40);
-        Room room1 = new Room(1, 4,0,4,4, 25);
-        room1.addEffector(new TemperatureChanger(new AlwaysTemperatureChange(0.02f)));
-        Room room2 = new Room(2, 0,4,7,4, 5);
-        Room room3 = new Room(3, 7,4,1,4, 35);
+        pl.edu.agh.agents.simulation.Room room0 = new pl.edu.agh.agents.simulation.Room(0, 0, 0, 4, 4, 40);
+        pl.edu.agh.agents.simulation.Room room1 = new pl.edu.agh.agents.simulation.Room(1, 4,0,4,4, 25);
+        room1.addEffector(new pl.edu.agh.agents.simulation.TemperatureChanger(new pl.edu.agh.agents.simulation.AlwaysTemperatureChange(0.02f)));
+        pl.edu.agh.agents.simulation.Room room2 = new pl.edu.agh.agents.simulation.Room(2, 0,4,7,4, 5);
+        pl.edu.agh.agents.simulation.Room room3 = new pl.edu.agh.agents.simulation.Room(3, 7,4,1,4, 35);
 
-        Connection connection0 = new Connection(room0, room1, 4.0f);
-        Connection connection1 = new Connection(room0, room2, 4.0f);
-        Connection connection2 = new Connection(room1, room2, 3.0f);
-        Connection connection3 = new Connection(room1, room3, 1.0f);
-        Connection connection4 = new Connection(room2, room3, 4.0f);
+        pl.edu.agh.agents.simulation.Connection connection0 = new pl.edu.agh.agents.simulation.Connection(room0, room1, 4.0f);
+        pl.edu.agh.agents.simulation.Connection connection1 = new pl.edu.agh.agents.simulation.Connection(room0, room2, 4.0f);
+        pl.edu.agh.agents.simulation.Connection connection2 = new pl.edu.agh.agents.simulation.Connection(room1, room2, 3.0f);
+        pl.edu.agh.agents.simulation.Connection connection3 = new pl.edu.agh.agents.simulation.Connection(room1, room3, 1.0f);
+        pl.edu.agh.agents.simulation.Connection connection4 = new pl.edu.agh.agents.simulation.Connection(room2, room3, 4.0f);
 
-        Set<Room> rooms = new LinkedHashSet<>();
+        Set<pl.edu.agh.agents.simulation.Room> rooms = new LinkedHashSet<>();
         rooms.add(room0);
         rooms.add(room1);
         rooms.add(room2);
         rooms.add(room3);
 
-        Set<Connection> connections = new HashSet<>();
+        Set<pl.edu.agh.agents.simulation.Connection> connections = new HashSet<>();
         connections.add(connection0);
         connections.add(connection1);
         connections.add(connection2);
         connections.add(connection3);
         connections.add(connection4);
 
-        World world = new World(rooms, connections);
+        pl.edu.agh.agents.simulation.World world = new pl.edu.agh.agents.simulation.World(rooms, connections);
         world.printStatus();
 
         String env_path = "./environment/";
         LinkedList<File> files = new LinkedList<>();
-        LinkedList<Room> room_list = new LinkedList<>();
+        LinkedList<pl.edu.agh.agents.simulation.Room> room_list = new LinkedList<>();
         room_list.add(room0);
         room_list.add(room1);
         room_list.add(room2);
@@ -63,7 +61,7 @@ public class Simulation {
             for (int j = 0; j < rooms.size(); j++) {
                 File file = files.get(j);
                 PrintWriter printWriter = new PrintWriter(file);
-                Room room = room_list.get(j);
+                pl.edu.agh.agents.simulation.Room room = room_list.get(j);
                 System.out.println("room " + j + " temp " + room.getValue());
                 printWriter.write(room.getValue());
                 printWriter.flush();
