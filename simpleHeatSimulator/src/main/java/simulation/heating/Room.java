@@ -1,7 +1,5 @@
 package simulation.heating;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,18 +35,8 @@ public class Room {
         return String.format("%d. %.1f", id, kelvinToCelsius(tempKelvin));
     }
 
-    public void printStatus() {
-//        System.out.println(getStatus());
-    }
-
     protected void addConnection(Connection connection) {
         connectionSet.add(connection);
-    }
-
-    protected void transferTemperatureTo(Room otherRoom, float wallSize) {
-        float diff = 0.02f * wallSize;
-        setTempKelvin(tempKelvin + diff);
-        otherRoom.setTempKelvin(otherRoom.getTempKelvin() - diff);
     }
 
     public int getId() {

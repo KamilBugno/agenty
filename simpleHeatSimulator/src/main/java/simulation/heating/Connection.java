@@ -12,7 +12,7 @@ public class Connection {
     public Connection(Room room1, Room room2, float lengthOfConnection) {
         this.room1 = room1;
         this.room2 = room2;
-        this.connector = lengthOfConnection * Consts.HEIGHT / Consts.D;
+        this.connector = Consts.K * lengthOfConnection * Consts.HEIGHT / Consts.D;
 
         room1.addConnection(this);
         room2.addConnection(this);

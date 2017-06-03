@@ -13,9 +13,12 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Room room0 = new Room(0, 0, 0, 4, 4, 40);
         Room room1 = new Room(1, 4,0,4,4, 25);
-        room1.addEffector(new TemperatureChanger(new AlwaysTemperatureChange(0.02f)));
         Room room2 = new Room(2, 0,4,7,4, 5);
         Room room3 = new Room(3, 7,4,1,4, 35);
+//        room0.addEffector(new TemperatureChanger(new AlwaysTemperatureChange(0.1f)));
+
+        room0.addEffector(new TemperatureChanger(new AlwaysTemperatureChange(-0.1f)));
+        room3.addEffector(new TemperatureChanger(new AlwaysTemperatureChange(0.05f)));
 
         Connection connection0 = new Connection(room0, room1, 4.0f);
         Connection connection1 = new Connection(room0, room2, 4.0f);
@@ -47,7 +50,7 @@ public class Main {
         System.out.println("[" + world.getJsonStatus() + "],");
         datajs.println("[" + world.getJsonStatus() + "],");
 
-        for(int i = 0; i<100;i++) {
+        for(int i = 0; i<150;i++) {
             world.step(60);
             System.out.println("[" + world.getJsonStatus() + "],");
             datajs.println("[" + world.getJsonStatus() + "],");
