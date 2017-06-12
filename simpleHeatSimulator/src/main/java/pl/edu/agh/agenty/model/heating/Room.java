@@ -1,4 +1,4 @@
-package simulation.heating;
+package pl.edu.agh.agenty.model.heating;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +16,8 @@ public class Room {
     private float capacity;
 
     private Set<Connection> connectionSet;
-    private Set<TemperatureChanger> tempChangers;
+    private Set<Effector> tempChangers;
+    private Set<Sensor> sensors;
 
     public Room(int id, float x, float y, float width, float height, float tempCelsius) {
         this.id = id;
@@ -29,6 +30,7 @@ public class Room {
 
         this.connectionSet = new HashSet<>();
         this.tempChangers = new HashSet<>();
+        this.sensors = new HashSet<>();
     }
 
     public String getStatus() {
@@ -67,6 +69,10 @@ public class Room {
         this.tempKelvin = (float) newTemp;
     }
 
+    public void changeTempByValueFromSensor(float tempInKelvin) {
+        this.tempKelvin = tempInKelvin;
+    }
+
     public float getX() {
         return x;
     }
@@ -95,13 +101,21 @@ public class Room {
         return tempKelvin - 274.15f;
     }
 
-    public void addEffector(TemperatureChanger temperatureChanger) {
-        tempChangers.add(temperatureChanger);
+    public void addEffector(Effector effector) {
+        tempChangers.add(effector);
+    }
+
+    public void addSensor(Sensor sensor) {
+        sensors.add(sensor);
+    }
+
+    public Set<Sensor> getSensors() {
+        return sensors;
     }
 
     public float effectorsEnergyChange(float dt) {
         float change = 0.0f;
-        for (TemperatureChanger tCh :tempChangers) {
+        for (Effector tCh : tempChangers) {
             change += tCh.getEnergyChange(dt);
         }
         return change;

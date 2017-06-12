@@ -1,4 +1,4 @@
-package simulation.heating;
+package pl.edu.agh.agenty.model.heating;
 
 /**
  * Created by huber on 25.04.2017.
