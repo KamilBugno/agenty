@@ -1,4 +1,4 @@
-package pl.edu.agh.agenty.model.heating;
+package simulation.heating;
 
 /**
  * Created by huber on 25.04.2017.
@@ -28,6 +28,8 @@ public class Connection {
 
     public float energyToExchange(float dt) {
         float de = dt * connector * (room2.getTempKelvin() - room1.getTempKelvin());
+//        System.out.printf("AAAenergy change between %d and %d: %f%n", room1.getId(), room2.getId(), de);
+//        System.out.printf("%f = %f * %f * (%f - %f)%n", de, dt, connector, room2.getTempKelvin(), room1.getTempKelvin());
         return de;
     }
 }

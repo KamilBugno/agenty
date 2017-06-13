@@ -1,7 +1,11 @@
-package pl.edu.agh.agenty.model.heating;
+package simulation.heating;
+
+import spark.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static spark.Service.*;
 
 /**
  * Created by huber on 25.04.2017.
@@ -14,10 +18,10 @@ public class Room {
     private float width;
     private float height;
     private float capacity;
+    private Service http;
 
     private Set<Connection> connectionSet;
-    private Set<Effector> tempChangers;
-    private Set<Sensor> sensors;
+    private Set<TemperatureChanger> tempChangers;
 
     public Room(int id, float x, float y, float width, float height, float tempCelsius) {
         this.id = id;
@@ -30,7 +34,15 @@ public class Room {
 
         this.connectionSet = new HashSet<>();
         this.tempChangers = new HashSet<>();
-        this.sensors = new HashSet<>();
+
+        http = ignite();
+        http.port(7000 + id);
+        http.get("/", (req, res) -> {
+            String hello = "Hi, i'm room with id: " + this.id;
+            return hello;
+        });
+        http.get("/temp", (req, res) -> kelvinToCelsius(this.tempKelvin));
+        System.out.println("Room - id: " + this.id + ". On port: " + (7000 + id));
     }
 
     public String getStatus() {
@@ -69,10 +81,6 @@ public class Room {
         this.tempKelvin = (float) newTemp;
     }
 
-    public void changeTempByValueFromSensor(float tempInKelvin) {
-        this.tempKelvin = tempInKelvin;
-    }
-
     public float getX() {
         return x;
     }
@@ -101,21 +109,13 @@ public class Room {
         return tempKelvin - 274.15f;
     }
 
-    public void addEffector(Effector effector) {
-        tempChangers.add(effector);
-    }
-
-    public void addSensor(Sensor sensor) {
-        sensors.add(sensor);
-    }
-
-    public Set<Sensor> getSensors() {
-        return sensors;
+    public void addEffector(TemperatureChanger temperatureChanger) {
+        tempChangers.add(temperatureChanger);
     }
 
     public float effectorsEnergyChange(float dt) {
         float change = 0.0f;
-        for (Effector tCh : tempChangers) {
+        for (TemperatureChanger tCh : tempChangers) {
             change += tCh.getEnergyChange(dt);
         }
         return change;
