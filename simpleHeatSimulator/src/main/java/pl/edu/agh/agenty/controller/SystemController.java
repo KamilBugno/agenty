@@ -1,11 +1,11 @@
 package pl.edu.agh.agenty.controller;
 
-import org.springframework.web.bind.annotation.ResponseBody;
-import pl.edu.agh.agenty.model.heating.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import pl.edu.agh.agenty.model.heating.*;
 
 import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
@@ -121,10 +121,11 @@ public class SystemController {
     }
 
     private float getTempFromSensor(Sensor sensor) {
-        String url = sensor.getCallback();
         try {
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            String callback = sensor.getCallback();
+            String Url = String.format("%s:%d/temp", callback, 7000 + sensor.getDeviceId());
+            URL url = new URL(Url);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             // optional default is GET
             con.setRequestMethod("GET");
