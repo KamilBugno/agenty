@@ -26,12 +26,18 @@ public class SystemController {
     private void postConstruct() {
         createWorld();
         Timer timer = new Timer();
-
         timer.schedule(new TimerTask() {
+            @Override
             public void run() {
                 getTempFromSensors();
             }
         }, 0, 60 * 1000);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                simulateWorld();
+            }
+        }, 0, 1000);
     }
 
     @RequestMapping(value = "/registerDevice", method = RequestMethod.POST)
@@ -144,6 +150,15 @@ public class SystemController {
         } catch (Exception e) {
             e.printStackTrace();
             return 0.0f;
+        }
+    }
+
+    private void simulateWorld() {
+        try {
+            world.step(60);
+            world.printStatus();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
