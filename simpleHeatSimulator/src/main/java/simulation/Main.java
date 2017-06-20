@@ -1,20 +1,22 @@
 package simulation;
 
 import simulation.heating.*;
+import spark.ModelAndView;
 import spark.Service;
+import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static spark.Service.ignite;
-import static spark.Spark.*;
+import static spark.Spark.get;
+
 
 public class Main {
     private int step = 60;
+    private int stepCount = 0;
+    private int timeSimulated = 0;
     Set<Room> rooms;
     Set<Connection> connections;
     Set<TemperatureChanger> tempChangers;
@@ -60,27 +62,62 @@ public class Main {
         world.printStatus();
 
         http = ignite().port(4567);
-        staticFiles.location("/");
-        get("/", (res, req) -> "Hello");
+        get("/", (request, response) -> {
+            return new ModelAndView(createConfigModel(), "config"); // located in resources/templates
+        }, new ThymeleafTemplateEngine());
+        get("/changeConfig", (req, res) -> {
+            System.out.println("Nowy request!");
+            System.out.println(req.queryParams("newSpeed"));
+            Integer newSpeed = null;
+            try {
+                newSpeed = Integer.valueOf(req.queryParams("newSpeed"));
+            } catch (NumberFormatException e) {
+                System.out.println("Bad Number Format");
+            }
+            if (newSpeed != null) step = newSpeed;
+            return new ModelAndView(createConfigModel(), "config"); // located in resources/templates
+        }, new ThymeleafTemplateEngine());
+    }
+
+    private Map<String, Object> createConfigModel() {
+        Map<String, Object> model = new HashMap<>();
+        model.put("stepCount", stepCount);
+        model.put("timeSimulated", timeSimulated);
+        model.put("simulationSpeed", step);
+        List<Object> roomsList = new ArrayList<>();
+        rooms.forEach(room -> {
+            Map<String, Object> roomModel = new HashMap<>();
+            roomModel.put("id", room.getId());
+            roomModel.put("temp", room.getTempCelsius());
+            roomModel.put("x", room.getX());
+            roomModel.put("y", room.getY());
+            roomModel.put("width", room.getWidth());
+            roomModel.put("height", room.getHeight());
+            roomsList.add(roomModel);
+        });
+        model.put("rooms", roomsList);
+
+        return model;
     }
 
     public void work() {
-//        while(true) {
-//            world.step(step);
-//            System.out.println("[" + world.getJsonStatus() + "],");
-//
-//            try {
-//                TimeUnit.SECONDS.sleep(1);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        while(true) {
+            world.step(step);
+            System.out.println("[" + world.getJsonStatus() + "],");
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            stepCount++;
+            timeSimulated += step;
+        }
     }
 
     public static void main(String[] args) throws FileNotFoundException {
         Main main = new Main();
         main.work();
-
-//        room0.addEffector(new TemperatureChanger(new AlwaysTemperatureChange(0.1f)));
     }
 }

@@ -1,0 +1,97 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <body>
+        <h1>Stats</h1>
+        <p>Step: <span th:text="${stepCount}"></span></p>
+        <p>Time Simulated: <span th:text="${timeSimulated}"></span></p>
+        <p>Simulation Speed: <span th:text="${simulationSpeed}"></span></p>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Room ID</th>
+                <th>Temp (*C)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="room: ${rooms}">
+                <td th:text="${room.id}"></td>
+                <td th:text="${room.temp}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br />
+        <form action="/changeConfig">
+            Change speed to:
+            <input type="text" name="newSpeed" th:value="${simulationSpeed}" />
+            <br />
+            <input type="submit" value="Change speed" />
+        </form>
+
+        <br /><br />
+
+        <canvas id="vis" width="400" height="400" style="border:1px solid #000000;">
+            Your browser does not support the HTML5 canvas tag.
+        </canvas>
+
+        <br />
+        <form action="/">
+            <input type="submit" value="Refresh" />
+        </form>
+    </body>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function coordToPx(coord) {
+            return coord * scale;
+        }
+
+        function posToPx(pos) {
+            return pos * scale + spacing;
+        }
+
+        var roomsList = [[${rooms}]];
+
+        var canvas = document.getElementById("vis");
+        var canvasWidth = canvas.width;
+        var canvasHeight = canvas.height;
+        var ctx = canvas.getContext("2d");
+
+        var spacing = 20;
+        var scale = canvasWidth;
+        var max = false;
+        for(var i = 0; i < roomsList.length; i++) {
+            var newScale = (canvasWidth - 2 * spacing)/(roomsList[i].x + roomsList[i].width);
+            if (i === 0 || newScale < scale)
+                scale = newScale;
+            var newScale = (canvasHeight - 2 * spacing)/(roomsList[i].y + roomsList[i].height);
+            if (newScale < scale)
+                scale = newScale;
+        }
+
+        ctx.lineWidth="1";
+        ctx.strokeStyle="black";
+
+        ctx.font = "14px Arial";
+
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for(var j = 0; j < roomsList.length; j++) {
+            var fs = "rgb(" + (30 + (6 * parseInt(roomsList[j].temp))) + ",0,0)";
+            ctx.fillStyle = fs;
+            ctx.fillRect(posToPx(roomsList[j].x), posToPx(roomsList[j].y), coordToPx(roomsList[j].width), coordToPx(roomsList[j].height));
+
+            ctx.rect(posToPx(roomsList[j].x), posToPx(roomsList[j].y), coordToPx(roomsList[j].width), coordToPx(roomsList[j].height));
+            ctx.stroke();
+
+            ctx.fillStyle = "white";
+            ctx.fillText(roomsList[j].temp, posToPx(roomsList[j].x) + 2 , posToPx(roomsList[j].y) + 16);
+        }
+        /*]]>*/
+    </script>
+</html>

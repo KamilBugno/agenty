@@ -10,5 +10,7 @@ targetCompatibility = 1.8
 dependencies {
     compile "com.sparkjava:spark-core:2.6.0"
     compile "org.slf4j:slf4j-simple:1.7.25"
+    compile "com.sparkjava:spark-template-thymeleaf:2.3"
+
 }
 
