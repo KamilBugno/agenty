@@ -18,7 +18,8 @@ public class Room {
     private float width;
     private float height;
     private float capacity;
-    private Service http;
+    private Sensor sensor;
+
 
     private Set<Connection> connectionSet;
     private Set<TemperatureChanger> tempChangers;
@@ -34,15 +35,7 @@ public class Room {
 
         this.connectionSet = new HashSet<>();
         this.tempChangers = new HashSet<>();
-
-        http = ignite();
-        http.port(7000 + id);
-        http.get("/", (req, res) -> {
-            String hello = "Hi, i'm room with id: " + this.id;
-            return hello;
-        });
-        http.get("/temp", (req, res) -> kelvinToCelsius(this.tempKelvin));
-        System.out.println("Room - id: " + this.id + ". On port: " + (7000 + id));
+        this.sensor = new Sensor(this);
     }
 
     public String getStatus() {
