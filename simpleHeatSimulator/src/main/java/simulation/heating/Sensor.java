@@ -21,9 +21,9 @@ public class Sensor extends Device {
     }
 
     @Override
-    protected void registerDevice() {
+    protected void registerDevice(int deviceId, int locationId) {
         try {
-            SendHttpUtils.register("sensor", Inet4Address.getLocalHost(), http.port());
+            SendHttpUtils.register("S", Inet4Address.getLocalHost().getHostAddress(), deviceId, locationId);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -34,10 +34,11 @@ public class Sensor extends Device {
         http = ignite();
         http.port(7000 + id);
         http.get("/", (req, res) -> {
-            String hello = "Hi, i'm sensor froom room with id: " + this.room.getId();
+            String hello = "Hi, i'm sensor from room with id: " + this.room.getId();
             return hello;
         });
-        http.get("/temp", (req, res) -> this.room.getTempCelsius());
+        http.get("/tempCelsius", (req, res) -> this.room.getTempCelsius());
+        http.get("/tempKelvin", (req, res) -> this.room.getTempKelvin());
         System.out.println("Room - id: " + id + ". On port: " + (http.port()));
     }
 }

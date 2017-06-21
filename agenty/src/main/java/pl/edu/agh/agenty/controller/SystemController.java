@@ -48,6 +48,7 @@ public class SystemController {
                           @RequestParam int deviceId,
                           @RequestParam int locationId,
                           @RequestParam String callback) {
+        System.out.println("DUPA");
         try {
             Device device;
             switch (type) {
@@ -129,7 +130,7 @@ public class SystemController {
     private float getTempFromSensor(Sensor sensor) {
         try {
             String callback = sensor.getCallback();
-            String Url = String.format("%s:%d/temp", callback, 7000 + sensor.getDeviceId());
+            String Url = String.format("http://%s:%d/tempKelvin", callback, 7000 + sensor.getDeviceId());
             URL url = new URL(Url);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 

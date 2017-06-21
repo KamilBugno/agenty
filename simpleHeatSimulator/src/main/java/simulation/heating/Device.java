@@ -6,10 +6,15 @@ package simulation.heating;
 public abstract class Device {
     public Device(int id) {
         startServer(id);
-        registerDevice();
+        registerDevice(id, id);
     }
 
-    protected abstract void registerDevice();
+    public Device(int deviceId, int locationId) {
+        startServer(deviceId);
+        registerDevice(deviceId, locationId);
+    }
+
+    protected abstract void registerDevice(int deviceId, int locationId);
 
     protected abstract void startServer(int id);
 }
