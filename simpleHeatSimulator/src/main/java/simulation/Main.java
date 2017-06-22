@@ -19,7 +19,7 @@ public class Main {
     private int timeSimulated = 0;
     Set<Room> rooms;
     Set<Connection> connections;
-    Set<TemperatureChanger> tempChangers;
+    Set<Effector> effectors;
     World world;
     Service http;
 
@@ -29,15 +29,15 @@ public class Main {
         Room room2 = new Room(2, 0,4,7,4, 5);
         Room room3 = new Room(3, 7,4,1,4, 35);
 
-        TemperatureChanger tch0 = new TemperatureChanger(0, new AlwaysTemperatureChange(-0.1f));
-        TemperatureChanger tch1 = new TemperatureChanger(1, new AlwaysTemperatureChange(-0.1f));
+        Effector effector0 = new Effector(0, new AlwaysTemperatureChange(-0.1f));
+        Effector effector1 = new Effector(1, new AlwaysTemperatureChange(-0.1f));
 
-        room0.addEffector(tch0);
-        room3.addEffector(tch1);
+        room0.addEffector(effector0);
+        room3.addEffector(effector1);
 
-        tempChangers = new HashSet<>();
-        tempChangers.add(tch0);
-        tempChangers.add(tch1);
+        effectors = new HashSet<>();
+        effectors.add(effector0);
+        effectors.add(effector1);
 
         Connection connection0 = new Connection(room0, room1, 4.0f);
         Connection connection1 = new Connection(room0, room2, 4.0f);

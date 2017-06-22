@@ -9,7 +9,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 public class SendHttpUtils {
 
     public static void register(String type, String myHostAddress, int deviceId, int locationId) {
-        System.out.println(myHostAddress);
         try {
             Unirest.post(createURL(Config.SERVER_IP, Config.SERVER_PORT, Config.REGISTER_ROUTE))
                     .field("type", type)

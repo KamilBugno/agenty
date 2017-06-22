@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by huber on 03.06.2017.
@@ -20,10 +19,10 @@ public class ImmediateSimulation {
         Room room1 = new Room(1, 4,0,4,4, 25);
         Room room2 = new Room(2, 0,4,7,4, 5);
         Room room3 = new Room(3, 7,4,1,4, 35);
-//        room0.addEffector(new TemperatureChanger(new AlwaysTemperatureChange(0.1f)));
+//        room0.addEffector(new Effector(new AlwaysTemperatureChange(0.1f)));
 
-        room0.addEffector(new TemperatureChanger(0, new AlwaysTemperatureChange(-0.1f)));
-        room3.addEffector(new TemperatureChanger(1, new AlwaysTemperatureChange(0.05f)));
+        room0.addEffector(new Effector(0, new AlwaysTemperatureChange(-0.1f)));
+        room3.addEffector(new Effector(1, new AlwaysTemperatureChange(0.05f)));
 
         Connection connection0 = new Connection(room0, room1, 4.0f);
         Connection connection1 = new Connection(room0, room2, 4.0f);

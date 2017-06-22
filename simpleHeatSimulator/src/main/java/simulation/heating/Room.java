@@ -1,11 +1,7 @@
 package simulation.heating;
 
-import spark.Service;
-
 import java.util.HashSet;
 import java.util.Set;
-
-import static spark.Service.*;
 
 /**
  * Created by huber on 25.04.2017.
@@ -20,9 +16,8 @@ public class Room {
     private float capacity;
     private Sensor sensor;
 
-
     private Set<Connection> connectionSet;
-    private Set<TemperatureChanger> tempChangers;
+    private Set<Effector> effectors;
 
     public Room(int id, float x, float y, float width, float height, float tempCelsius) {
         this.id = id;
@@ -34,7 +29,7 @@ public class Room {
         this.capacity = width * height * Consts.HEIGHT;
 
         this.connectionSet = new HashSet<>();
-        this.tempChangers = new HashSet<>();
+        this.effectors = new HashSet<>();
         this.sensor = new Sensor(this);
     }
 
@@ -102,14 +97,15 @@ public class Room {
         return tempKelvin - 274.15f;
     }
 
-    public void addEffector(TemperatureChanger temperatureChanger) {
-        tempChangers.add(temperatureChanger);
+    public void addEffector(Effector effector) {
+        effectors.add(effector);
+        effector.addRoom(this);
     }
 
     public float effectorsEnergyChange(float dt) {
         float change = 0.0f;
-        for (TemperatureChanger tCh : tempChangers) {
-            change += tCh.getEnergyChange(dt);
+        for (Effector effector : effectors) {
+            change += effector.getEnergyChange(dt);
         }
         return change;
     }

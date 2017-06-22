@@ -48,7 +48,6 @@ public class SystemController {
                           @RequestParam int deviceId,
                           @RequestParam int locationId,
                           @RequestParam String callback) {
-        System.out.println("DUPA");
         try {
             Device device;
             switch (type) {

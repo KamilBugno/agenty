@@ -18,6 +18,7 @@ public class Sensor extends Device {
     public Sensor(Room room) {
         super(room.getId());
         this.room = room;
+        registerDevice(room.getId(), room.getId());
     }
 
     @Override
